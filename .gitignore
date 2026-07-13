@@ -1,0 +1,29 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+
+# --- Entorno virtual ---
+venv/
+.env
+.env.*
+
+# --- Streamlit ---
+.streamlit/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- VS Code ---
+.vscode/
+
+# --- Logs ---
+*.log
+
+# --- Sistema operativo ---
+.DS_Store
+Thumbs.db
