@@ -2,6 +2,14 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from components.code_viewer import show_code
+from components.run_button import run_button
+
+from logic.load_data import load_penguins
+from logic.outliers import cap_outliers
+from logic.feature_engineering import add_bill_ratio
+from logic.preprocessing import build_preprocessor
+from logic.models import train_random_forest, train_xgboost
 
 st.set_page_config(
     page_title="Preprocessing & ML Demo",
