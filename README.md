@@ -1,5 +1,4 @@
-# Masterclass: Preprocesamiento Avanzado y Algoritmos Ensemble
-### Equipo 4 · Bootcamp ML
+# Masterclass / Píldora Extendida: Preprocesamiento Avanzado y Algoritmos Ensemble
 
 Sesión de la "píldora extendida" sobre preprocesamiento avanzado (outliers, encoding, feature engineering) y algoritmos ensemble (Random Forest, XGBoost, Bagging vs. Boosting), usando el dataset **Palmer Penguins**.
 
@@ -11,11 +10,9 @@ Sesión de la "píldora extendida" sobre preprocesamiento avanzado (outliers, en
 |---|---|
 | Presentación teórica (Genially) | https://view.genially.com/6a500ced927e47fbbe0a9fea |
 | Demo interactiva (Streamlit) | https://bootcamp-preprocesamiento.streamlit.app/ |
-| Notebook con la solución completa (live coding) | `practica_preprocesamiento_ensemble.py` |
+| Notebook con la solución completa (live coding) | `live_coding_demo.ipnb` |
 | Notebook con TODOs — reto de aplicación | `reto_notebook_bloque3.ipynb` |
 | Ficha de Criterio Ético | `ficha_criterio_etico.md` |
-| Guión de la sesión (4 bloques) | `masterclass_guion_v2_4bloques.md` |
-| Infografías de apoyo | `infografia_bagging_boosting_cyberpunk.pdf`, `infografia_camino_ml_cyberpunk.png`, `infografia_guia_preprocesamiento_cyberpunk.png` |
 
 ---
 
@@ -26,6 +23,7 @@ pip install pandas seaborn scikit-learn xgboost matplotlib
 ```
 
 Si vais a abrir el notebook del reto en **Google Colab**, no hace falta instalar nada salvo XGBoost:
+
 ```python
 !pip install xgboost -q
 ```
@@ -34,8 +32,8 @@ Si vais a abrir el notebook del reto en **Google Colab**, no hace falta instalar
 
 ## ▶️ Cómo ejecutar
 
-1. Abrid `practica_preprocesamiento_ensemble.py` en VSCode y ejecutad las celdas (`# %%`) en orden — es el live coding del Bloque 2.
-2. Para el reto (Bloque 3), abrid `reto_notebook_bloque3.ipynb` en Jupyter o Google Colab y completad los bloques marcados con `# TODO: Implementar aquí`.
+1. Abrid `live_coding_demo.ipynb` en VSCode, Jupyter o Google Colab: es el live coding de la demo. 
+2. Para el reto, abrid `reto_notebook_bloque3.ipynb` en VSCode, Jupyter o Google Colab y completad los bloques marcados con `# TODO: Implementar aquí`.
 
 ---
 
@@ -55,4 +53,4 @@ Si vais a abrir el notebook del reto en **Google Colab**, no hace falta instalar
 ---
 
 ## 👥 Autoría
-Preparado por Equipo 4 para el bloque de Machine Learning del bootcamp.
+Preparado por Elena Díaz - [@HelenDiMo](https://github.com/HelenDiMo) para el bloque de Machine Learning del bootcamp.
