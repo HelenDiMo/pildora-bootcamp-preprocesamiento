@@ -586,12 +586,11 @@ Esto indica que:
 # ---------------------------------------------------------
 
 if section == "9. Ficha de Criterio Ético":
-    
-    st.markdown("""
-## 🧭 Criterio Ético y Limitaciones del Modelo
+    st.header("🧭 Criterio Ético y Limitaciones del Modelo")
 
-### 📌 Contexto del dataset
-El dataset **Palmer Penguins** fue recopilado por la Dra. Kristen Gorman en la Estación Palmer (Antártida).  
+with st.expander("📌 Contexto del dataset"):
+    st.info("""
+El dataset **Palmer Penguins** fue recopilado por la Dra. Kristen Gorman en la Estación Palmer (Antártida).
 Incluye **344 observaciones** de **tres especies** de pingüinos en **tres islas** concretas.
 
 Aunque es excelente para fines pedagógicos, presenta limitaciones claras:
@@ -599,33 +598,34 @@ Aunque es excelente para fines pedagógicos, presenta limitaciones claras:
 - Procede de **una única región geográfica**.  
 - Contiene **pocas especies** y **pocas muestras**.  
 - Los modelos entrenados con él **no son generalizables** a otras poblaciones o ecosistemas.
+""")
 
----
-
-### 🤖 Riesgos algorítmicos
+with st.expander("🤖 Riesgos algorítmicos"):
+    st.warning("""
 Modelos como **Random Forest** y **XGBoost** pueden:
 
 - Sobreajustar fácilmente en datasets pequeños (de hecho, aquí se alcanza **100% accuracy**).  
 - Actuar como **cajas negras**, dificultando explicar por qué predicen lo que predicen.  
 - Requerir validación adicional (p. ej., **cross-validation**) antes de confiar en sus resultados.
+""")
 
----
-
-### ⚠️ Riesgos si este flujo se aplicara a datos sensibles
+with st.expander("⚠️ Riesgos si este flujo se aplicara a datos sensibles"):
+    st.error("""
 Aunque este dataset es inocuo, **el mismo pipeline** aplicado a datos reales podría causar:
 
 - **Sesgos amplificados** por mala limpieza de outliers.  
 - **Fugas de información** entre train/test que inflan métricas.  
 - **Decisiones injustas** si se confía solo en accuracy.  
-- Impacto negativo en ámbitos como:
-  - salud,  
-  - concesión de crédito,  
-  - selección de personal,  
-  - evaluación de riesgo.
 
----
+Esto puede tener impacto negativo en ámbitos como:
+- salud,  
+- concesión de crédito,  
+- selección de personal,  
+- evaluación de riesgo.
+""")
 
-### 📝 Nota final
+with st.expander("📝 Nota final"):
+    st.success("""
 Este bloque es una **reflexión ética complementaria** para acompañar la entrega técnica.  
 No sustituye un análisis formal de impacto algorítmico.
 """)
