@@ -32,8 +32,8 @@ Si vais a abrir el notebook del reto en **Google Colab**, no hace falta instalar
 
 ## ▶️ Cómo ejecutar
 
-1. Abrid `live_coding_demo.ipnb` en VSCode, es el live coding de la demo. 
-2. Para el reto, abrid `reto_notebook_bloque3.ipynb` en Jupyter o Google Colab y completad los bloques marcados con `# TODO: Implementar aquí`.
+1. Abrid `live_coding_demo.ipynb` en VSCode, Jupyter o Google Colab: es el live coding de la demo. 
+2. Para el reto, abrid `reto_notebook_bloque3.ipynb` en VSCode, Jupyter o Google Colab y completad los bloques marcados con `# TODO: Implementar aquí`.
 
 ---
 
