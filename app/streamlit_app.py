@@ -22,12 +22,20 @@ st.session_state.setdefault("xgb_acc", None)
 
 # 1. TITULO
 
-st.set_page_config(page_title="Preprocessing & ML Demo", layout="wide")
+st.set_page_config(page_title=" 🐧 Preprocessing & ML Demo", layout="wide")
 
-st.title("🐧 Preprocessing & ML Demo — Palmer Penguins")
-st.write(
-    "Esta demo interactiva muestra técnicas avanzadas de preprocesamiento y comparación entre Random Forest y XGBoost."
-)
+# ======== CARGAR CSS ========
+with open("app/assets/styles.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# ======== BANNER ========
+st.image("app/assets/banner2.png", width="stretch")
+
+st.title("PREPROCESSING & ML DEMO — Palmer Penguins")
+st.write("""
+    *Demo interactiva para mostrar técnicas avanzadas de preprocesamiento y comparación entre Random Forest y XGBoost.*
+    - **Dataset Utilizado**: Palmer penguins
+""")
 
 # 2. BARRA LATERAL DE NAVEGACIÓN
 
@@ -66,11 +74,9 @@ if section == "1. Cargar Dataset y Exploración Inicial":
     # ---------------------------------------------------------
     # BLOQUE 1 — Carga del dataset
     # ---------------------------------------------------------
-    st.code("""
-df = sns.load_dataset('penguins')
+    st.code("""df = sns.load_dataset('penguins')
 print("Shape:", df.shape)
-df.head()
-""")
+df.head()""")
 
     if run_button("Cargar datos"):
         df = load_penguins()
@@ -588,8 +594,8 @@ Esto indica que:
 if section == "9. Ficha de Criterio Ético":
     st.header("🧭 Criterio Ético y Limitaciones del Modelo")
 
-with st.expander("📌 Contexto del dataset"):
-    st.info("""
+    with st.expander("📌 Contexto del dataset"):
+        st.info("""
 El dataset **Palmer Penguins** fue recopilado por la Dra. Kristen Gorman en la Estación Palmer (Antártida).
 Incluye **344 observaciones** de **tres especies** de pingüinos en **tres islas** concretas.
 
@@ -600,8 +606,8 @@ Aunque es excelente para fines pedagógicos, presenta limitaciones claras:
 - Los modelos entrenados con él **no son generalizables** a otras poblaciones o ecosistemas.
 """)
 
-with st.expander("🤖 Riesgos algorítmicos"):
-    st.warning("""
+    with st.expander("🤖 Riesgos algorítmicos"):
+        st.warning("""
 Modelos como **Random Forest** y **XGBoost** pueden:
 
 - Sobreajustar fácilmente en datasets pequeños (de hecho, aquí se alcanza **100% accuracy**).  
@@ -609,8 +615,8 @@ Modelos como **Random Forest** y **XGBoost** pueden:
 - Requerir validación adicional (p. ej., **cross-validation**) antes de confiar en sus resultados.
 """)
 
-with st.expander("⚠️ Riesgos si este flujo se aplicara a datos sensibles"):
-    st.error("""
+    with st.expander("⚠️ Riesgos si este flujo se aplicara a datos sensibles"):
+        st.error("""
 Aunque este dataset es inocuo, **el mismo pipeline** aplicado a datos reales podría causar:
 
 - **Sesgos amplificados** por mala limpieza de outliers.  
@@ -624,8 +630,14 @@ Esto puede tener impacto negativo en ámbitos como:
 - evaluación de riesgo.
 """)
 
-with st.expander("📝 Nota final"):
-    st.success("""
+    with st.expander("📝 Nota final"):
+        st.success("""
 Este bloque es una **reflexión ética complementaria** para acompañar la entrega técnica.  
 No sustituye un análisis formal de impacto algorítmico.
 """)
+
+st.markdown("### DEBUG — prueba de título")
+st.write("Este es un título generado con markdown.")
+st.header("Este es un título generado con st.header()")
+st.subheader("Este es un subtítulo generado con st.subheader()")
+st.title("Este es un título generado con st.title()")
