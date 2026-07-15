@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from components.run_button import run_button
+from components.buttons import run_button
 
 from logic.load_data import load_penguins
 from logic.outliers import cap_outliers
@@ -29,7 +29,7 @@ with open("app/assets/styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # ======== BANNER ========
-st.image("app/assets/banner2.png", width="stretch")
+st.image("app/assets/banner.jpg", width="stretch")
 
 st.title("PREPROCESSING & ML DEMO — Palmer Penguins")
 st.write("""
@@ -84,7 +84,6 @@ df.head()""")
         st.write("Shape:", df.shape)
         st.write(df.head())
         st.success("Dataset cargado correctamente.")
-
 
     # ---------------------------------------------------------
     # BLOQUE 2 — Análisis de nulos
@@ -635,9 +634,3 @@ Esto puede tener impacto negativo en ámbitos como:
 Este bloque es una **reflexión ética complementaria** para acompañar la entrega técnica.  
 No sustituye un análisis formal de impacto algorítmico.
 """)
-
-st.markdown("### DEBUG — prueba de título")
-st.write("Este es un título generado con markdown.")
-st.header("Este es un título generado con st.header()")
-st.subheader("Este es un subtítulo generado con st.subheader()")
-st.title("Este es un título generado con st.title()")
