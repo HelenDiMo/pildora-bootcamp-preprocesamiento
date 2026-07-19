@@ -1,9 +1,13 @@
+import os
+import sys
 import streamlit as st
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import streamlit.components.v1 as components
 
+# Conseguimos la ruta absoluta del directorio donde está ESTE archivo (la carpeta 'app')
+base_path = os.path.dirname(os.path.abspath(__file__))
+if base_path not in sys.path:
+    sys.path.insert(0, base_path)
+
+# Ahora las importaciones funcionarán de forma idéntica en local y en la nube
 from components.buttons import run_button, retro_typewriter_code
 from components.code_viewer import colorear_codigo
 
