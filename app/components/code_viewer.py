@@ -4,8 +4,8 @@ import re
 
 def colorear_codigo(codigo_puro: str) -> str:
     """
-    Versión ultra-robusta con segmentación de HTML. Evita que los tags existentes
-    bloqueen el coloreado de palabras clave al inicio de la línea como 'if' y 'elif'.
+    Versión ultra-robusta con segmentación de HTML y soporte para azul eléctrico
+    en corchetes [] y llaves {}.
     """
     if not codigo_puro:
         return ""
@@ -35,29 +35,32 @@ def colorear_codigo(codigo_puro: str) -> str:
         linea = re.sub(r"('[^']*')", r"<span class='string'>\1</span>", linea)
         linea = re.sub(r'("[^"]*")', r"<span class='string'>\1</span>", linea)
         
-        # 3. Operadores y símbolos estructurales (tus seleccionados)
+        # 3. Operadores y símbolos estructurales
         linea = re.sub(r'\(', "<span class='operator'>(</span>", linea)
         linea = re.sub(r'\)', "<span class='operator'>)</span>", linea)
         linea = re.sub(r'\+', "<span class='operator'>+</span>", linea)
         linea = re.sub(r'\-', "<span class='operator'>-</span>", linea)
         linea = re.sub(r'\*', "<span class='operator'>*</span>", linea)
         
+        # --- NUEVO: Corchetes y llaves en azul eléctrico ---
+        linea = re.sub(r'\[', "<span class='brackets'>[</span>", linea)
+        linea = re.sub(r'\]', "<span class='brackets'>]</span>", linea)
+        linea = re.sub(r'\{', "<span class='brackets'>{</span>", linea)
+        linea = re.sub(r'\}', "<span class='brackets'>}</span>", linea)
+        
         # 4. Números enteros y decimales
         linea = re.sub(r'\b(\d+(?:\.\d+)?)\b', r"<span class='number'>\1</span>", linea)
 
-        # 2. KEYWORDS Y BUILTINS: Segmentamos la línea para no tocar los tags HTML existentes
-        # Esto separa la línea en texto puro y etiquetas HTML de forma alterna
+        # 2. KEYWORDS Y BUILTINS: Con segmentación para respetar etiquetas creadas
         partes = re.split(r'(<[^>]+>)', linea)
         
         for i in range(len(partes)):
-            # Si la parte NO es una etiqueta HTML, coloreamos de forma segura las palabras completas
             if not partes[i].startswith('<'):
                 for kw in KEYWORDS:
                     partes[i] = re.sub(r'\b' + kw + r'\b', f"<span class='keyword'>{kw}</span>", partes[i])
                 for b in BUILTINS:
                     partes[i] = re.sub(r'\b' + b + r'\b', f"<span class='builtin'>{b}</span>", partes[i])
         
-        # Recomponemos la línea con sus partes procesadas
         lineas_procesadas.append("".join(partes))
         
     return '\n'.join(lineas_procesadas)

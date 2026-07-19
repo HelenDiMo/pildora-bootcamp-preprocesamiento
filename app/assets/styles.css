@@ -113,6 +113,10 @@ pre code .builtin {
     color: #1f7a4f !important;
 }
 
+pre code .brackets {
+    color: #3c79e3; /* Azul eléctrico / Cyan neón ultra-brillante */
+}
+
 
 
 

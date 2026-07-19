@@ -102,11 +102,6 @@ def retro_typewriter_code(html_coloreado: str, key: str, height: int = 250):
     """
     components.html(html_code, height=height)
 
-    # Si JS nos avisa de que terminó de escribir, actualizamos el Session State de Streamlit
-    #if response:
-    #    st.session_state[key] = True
-    #    st.rerun()
-
 def run_button(label="Run"):
     return st.button(label)
 

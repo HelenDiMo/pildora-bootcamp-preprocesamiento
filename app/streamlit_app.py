@@ -660,7 +660,7 @@ print(f"XGBoost Accuracy:       {accuracy_score(y_test_enc, xgb_preds):.3f}")"""
     codigo_coloreado_7 = colorear_codigo(codigo_seccion_7)
 
     # Cambiamos st.code por tu componente retro animado
-    retro_typewriter_code(codigo_coloreado_7, key="key_comparativa", height=500)
+    retro_typewriter_code(codigo_coloreado_7, key="key_comparativa", height=400)
 
     # 2. Ejecución al pulsar el botón
     if run_button("Comparar modelos"):
