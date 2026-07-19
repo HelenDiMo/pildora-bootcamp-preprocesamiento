@@ -143,7 +143,6 @@ if section == "1. Cargar Dataset y Exploración Inicial":
     
     retro_typewriter_code(codigo_seccion_1_3, key="key_descripcion", height=100) # en este height hagoq ue queda el codigo en el contenedor
 
-
     if run_button("Describir variables numéricas"):
         df = st.session_state["df"]
         st.write(df.describe())
