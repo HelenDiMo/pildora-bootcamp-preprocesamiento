@@ -76,13 +76,13 @@ pre code span {
 
 /* Palabras clave de Python */
 pre code .keyword {
-    color: #795a1f !important;                   /* marrón pingüino */
+    color: #9028b5 !important;                   /* morado */
     font-weight: 700 !important;
 }
 
 /* Strings */
 pre code .string {
-    color: #1f7a4f !important;                   /* verde frío */
+    color: #2d7da5 !important;                   /* verde frío */
 }
 
 /* Números */
@@ -95,6 +95,24 @@ pre code .comment {
     color: #5a6b7a !important;                   /* gris polar */
     font-style: italic !important;
 }
+
+/* Operadores */
+pre code .operator {
+    color: #b9a70b !important;
+    font-weight: 700 !important;
+}
+
+/* Funciones y Metodos */
+pre code .function {
+    color: #a35200 !important;
+    font-weight: 600 !important;
+}
+
+/* Librerias y Modulos */
+pre code .builtin {
+    color: #1f7a4f !important;
+}
+
 
 
 

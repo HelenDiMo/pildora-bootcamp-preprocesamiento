@@ -1,16 +1,14 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-def retro_typewriter_code(html_content: str, key: str, height: int = 250):
+def retro_typewriter_code(html_coloreado: str, key: str, height: int = 250):
     """
-    Renderiza un bloque de código con efecto máquina de escribir retro persistente.
-    Se anima estrictamente al pulsar '▶ RUN CODE' y se mantiene fijo en futuros reruns.
+    Renderiza el código con efecto máquina de escribir mostrando los colores en tiempo real.
+    Utiliza un clonador de nodos para evitar roturas por culpa de etiquetas HTML.
     """
-    # 1. Inicializar el estado de visibilidad en Streamlit
     if key not in st.session_state:
         st.session_state[key] = False
 
-    # 2. Cargar el CSS personalizado
     try:
         with open("app/assets/styles.css") as f:
             custom_css = f.read()
@@ -21,17 +19,9 @@ def retro_typewriter_code(html_content: str, key: str, height: int = 250):
         except FileNotFoundError:
             custom_css = ""
 
-    # Botón nativo de Streamlit
     if st.button("▶ RUN CODE", key=f"btn_{key}"):
         st.session_state[key] = True
-        # Usamos un pequeño truco inyectando un script temporal para limpiar el almacenamiento local
-        # Esto fuerza a que este bloque específico SE SIENTA obligado a animarse de nuevo
         components.html(f"<script>window.localStorage.removeItem('{key}_done');</script>", height=0)
-
-    # Si nunca se ha pulsado el botón en esta sesión, mantenemos el contenedor invisible o vacío
-    #if not st.session_state[key]:
-        #components.html("", height=0)
-        #return
 
     html_code = f"""
     <style>
@@ -46,44 +36,62 @@ def retro_typewriter_code(html_content: str, key: str, height: int = 250):
             margin-top: 5px !important;
             margin-bottom: 0px !important;
         }}
+        pre code {{
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            display: block;
+        }}
+        /* Estilo para ocultar el molde original mientras se copia */
+        #molde_oculto {{
+            display: none;
+        }}
     </style>
 
+    <!-- Contenedor real donde escribe la máquina -->
     <pre><code id="typewriter"></code></pre>
+    
+    <!-- Contenedor oculto con el código ya coloreado por Python -->
+    <div id="molde_oculto">{html_coloreado}</div>
 
     <script>
-        const rawHtml = {repr(html_content)};
         const storageKey = '{key}_done';
         const target = document.getElementById('typewriter');
+        const molde = document.getElementById('molde_oculto');
         
-        // Comprobamos si se pulsó el botón en Streamlit
         const isActivated = { "true" if st.session_state[key] else "false" };
         const hasAnimatedBefore = window.localStorage.getItem(storageKey);
 
-        // 1. PRIORIDAD: Si el botón NO se ha pulsado en Streamlit, forzamos contenedor VACÍO
         if (!isActivated) {{
             target.innerHTML = "";
         }} 
-        // 2. Si el botón SÍ está pulsado y ya se animó antes, se queda fijo de golpe
         else if (hasAnimatedBefore === 'true') {{
-            target.innerHTML = rawHtml;
+            target.innerHTML = molde.innerHTML;
         }} 
-        // 3. Si el botón SÍ está pulsado pero es la primera vez, se ejecuta el efecto
         else {{
+            // Conseguimos el HTML estructurado y lo troceamos de forma inteligente
+            const htmlCompleto = molde.innerHTML;
             let i = 0;
-            let currentText = "";
+            let currentHTML = "";
             
+            // Este array guardará las posiciones de control para saber cuándo abrir/cerrar etiquetas
             function type() {{
-                if (i < rawHtml.length) {{
-                    if (rawHtml[i] === '<') {{
-                        let closingTagIndex = rawHtml.indexOf('>', i);
-                        currentText += rawHtml.substring(i, closingTagIndex + 1);
-                        i = closingTagIndex + 1;
+                if (i < htmlCompleto.length) {{
+                    // Si el carácter actual es una apertura de etiqueta HTML, la metemos entera de golpe
+                    if (htmlCompleto[i] === '<') {{
+                        let finEtiqueta = htmlCompleto.indexOf('>', i);
+                        currentHTML += htmlCompleto.substring(i, finEtiqueta + 1);
+                        i = finEtiqueta + 1;
+                        // Ejecutamos recursivamente de inmediato para no meter pausas en las etiquetas
+                        type(); 
                     }} else {{
-                        currentText += rawHtml[i];
+                        // Si es un carácter visible, lo añadimos y esperamos el timeout
+                        currentHTML += htmlCompleto[i];
+                        target.innerHTML = currentHTML;
                         i++;
+                        setTimeout(type, 20);
                     }}
-                    target.innerHTML = currentText;
-                    setTimeout(type, 15);
                 }} else {{
                     window.localStorage.setItem(storageKey, 'true');
                 }}
@@ -92,7 +100,6 @@ def retro_typewriter_code(html_content: str, key: str, height: int = 250):
         }}
     </script>
     """
-    
     components.html(html_code, height=height)
 
     # Si JS nos avisa de que terminó de escribir, actualizamos el Session State de Streamlit

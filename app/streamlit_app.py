@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import streamlit.components.v1 as components
 
 from components.buttons import run_button, retro_typewriter_code
+from components.code_viewer import colorear_codigo
 
 from logic.load_data import load_penguins
 from logic.outliers import cap_outliers
@@ -84,14 +85,15 @@ if section == "1. Cargar Dataset y Exploración Inicial":
     # ---------------------------------------------------------
     # BLOQUE 1 — Carga del dataset (Efecto máquina de Escribir)
     # ---------------------------------------------------------
-    codigo_seccion_1_1 = (
-        "df = sns.load_dataset(<span class='string'>'penguins'</span>)\n"
-        "<span class='keyword'>print</span>(<span class='string'>\"Shape:\"</span>, df.shape)\n"
-        "df.head()"
+    codigo_puro_1_1 = ("""df = sns.load_dataset('penguins')
+print("Shape:", df.shape)
+df.head()"""
     )
+
+    codigo_coloreado_1_1 = colorear_codigo(codigo_puro_1_1)
     
     # Invocamos la función mágica (se queda exactamente igual)
-    retro_typewriter_code(codigo_seccion_1_1, key="key_carga", height=180) 
+    retro_typewriter_code(codigo_coloreado_1_1, key="key_carga", height=180) 
     
     # 2. Si pulsas el botón, guardamos el DataFrame y activamos el interruptor
     if run_button("Cargar Dataset"):
@@ -116,10 +118,12 @@ if section == "1. Cargar Dataset y Exploración Inicial":
         st.session_state["nulos_mostrados"] = False
 
     codigo_seccion_1_2 = (
-        "df.isnull()<span class = 'comment'>.</span><span class='keyword'>sum()</span>"
+        "df.isnull().sum()"
         )
+    
+    codigo_coloreado_1_2 = colorear_codigo(codigo_seccion_1_2)
 
-    retro_typewriter_code(codigo_seccion_1_2, key="key_nulos", height=100) # en este height hagoq ue queda el codigo en el contenedor
+    retro_typewriter_code(codigo_coloreado_1_2, key="key_nulos_col", height=100) # en este height hago que queda el codigo en el contenedor
 
     # Si se pulsa el botón, activamos su persistencia
     if run_button("Mostrar nulos"):
@@ -138,10 +142,13 @@ if section == "1. Cargar Dataset y Exploración Inicial":
 
     st.header("Descripción de variables numéricas")
     codigo_seccion_1_3 = (
-        "df.<span class='keyword'>describe()</span>"
+        "df.describe()"
         )
+        
+    codigo_coloreado_1_3 = colorear_codigo(codigo_seccion_1_3)
+
     
-    retro_typewriter_code(codigo_seccion_1_3, key="key_descripcion", height=100) # en este height hagoq ue queda el codigo en el contenedor
+    retro_typewriter_code(codigo_coloreado_1_3, key="key_descripcion", height=100) # en este height hagoq ue queda el codigo en el contenedor
 
     if run_button("Describir variables numéricas"):
         df = st.session_state["df"]
@@ -169,9 +176,11 @@ IQR = Q3 - Q1
 lower_bound = Q1 - 1.5 * IQR
 upper_bound = Q3 + 1.5 * IQR
 
-outliers = df[(df['bill_length_mm'] < lower_bound) |
-        (df['bill_length_mm'] > upper_bound)]
-print(f"Outliers detectados: {len(outliers)}")
+outliers = df[(df['bill_length_mm'] < lower_bound) | 
+    (df['bill_length_mm'] > upper_bound)]
+
+print(f"Outliers detectados en bill_length_mm: {len(outliers)}")
+print(f"Límites válidos: [{lower_bound:.2f}, {upper_bound:.2f}]")
 
 # Tratamiento: "capping" (winsorizing) en vez de eliminar filas
 df['bill_length_mm'] = df['bill_length_mm'].clip(lower_bound, upper_bound)
@@ -181,7 +190,9 @@ ax[1].set_title('Después de capar outliers')
 plt.tight_layout()
 plt.show()"""
 
-    retro_typewriter_code(codigo_seccion_2, key="key_outliers", height=850) # en este height hagoq ue queda el codigo en el contenedor
+    codigo_coloreado_2 = colorear_codigo(codigo_seccion_2)
+
+    retro_typewriter_code(codigo_coloreado_2, key="key_outliers", height=900) # en este height hagoq ue queda el codigo en el contenedor
 
     # 3. Al pulsar el botón, ejecutamos el tratamiento matemático y guardamos los resultados en el estado
     if run_button("Tratar outliers"):
@@ -198,31 +209,46 @@ plt.show()"""
         # Activamos el interruptor de persistencia
         st.session_state["outliers_tratados"] = True
 
-    # 4. PERSISTENCIA: Si el interruptor está activo, dibujamos los gráficos de forma fija
+# 4. PERSISTENCIA: Si el interruptor está activo, dibujamos los gráficos de forma fija
     if st.session_state["outliers_tratados"]:
-        # Recuperamos los datos actualizados de la sesión
+        # 1. Recuperamos el DataFrame del estado de la sesión de forma segura
+        # Si 'df' mutó en el botón, podemos usar una copia o el df_actual que recuperaste arriba
         df_persistente = st.session_state["df"]
         lower = st.session_state["outliers_lower"]
         upper = st.session_state["outliers_upper"]
 
+        # 2. Para contar cuántos outliers HABÍA, usamos el mismo DataFrame persistente.
+        # Al usar .clip(), los valores extremos se igualan a los límites, por lo que podemos
+        # contar cuántos valores coinciden exactamente con los límites (el "capping" aplicado)
+        outliers_inferiores = df_persistente['bill_length_mm'] == lower
+        outliers_superiores = df_persistente['bill_length_mm'] == upper
+        
+        cant_outliers = outliers_inferiores.sum() + outliers_superiores.sum()
+
         col1, col2 = st.columns(2)
 
-        # Gráfico 1: Aunque el dataframe ya esté mutado, podemos simular el "antes" 
-        # o dejar que renderice el estado actual si lo manejas con otra lógica de copia.
+        # Gráfico 1: Para mostrar el "Antes" de forma persistente, dado que df_original no existe globalmente,
+        # lo ideal es que en la SECCION 1 (o al cargar el archivo) guardes un "df_original" en st.session_state.
+        # Si no lo tienes guardado, de momento renderizamos el estado actual:
         with col1:
             fig_before, ax = plt.subplots(figsize=(3, 2))
-            sns.boxplot(y=df_persistente["bill_length_mm"], ax=ax)
+            # Si guardas el original al inicio del script como st.session_state["df_original"], úsalo aquí
+            if "df_original" in st.session_state:
+                sns.boxplot(y=st.session_state["df_original"]["bill_length_mm"], ax=ax)
+            else:
+                sns.boxplot(y=df_persistente["bill_length_mm"], ax=ax)
             ax.set_title("Antes de tratar outliers")
             st.pyplot(fig_before)
 
-        # Gráfico 2: Renderizado del boxplot posterior
+        # Gráfico 2: Renderizado del boxplot posterior (ya capado)
         with col2:
             fig_after, ax2 = plt.subplots(figsize=(3, 2))
             sns.boxplot(y=df_persistente["bill_length_mm"], ax=ax2)
             ax2.set_title("Después de capar outliers")
             st.pyplot(fig_after)
 
-        # Información adicional y mensaje de éxito fijos
+        # 4. Información adicional y mensaje de éxito fijos (Usando la variable calculada arriba)
+        st.write(f"Outliers detectados en bill_length_mm: **{cant_outliers}**")
         st.write(f"Límite inferior: {lower:.2f}")
         st.write(f"Límite superior: {upper:.2f}")
         st.success("Outliers tratados correctamente")
@@ -244,9 +270,11 @@ if section == "3. Feature Engineering":
 sns.boxplot(data=df, x='species', y='bill_ratio')
 plt.title('bill_ratio por especie')
 plt.show()""")
+    
+    codigo_coloreado_3 = colorear_codigo(codigo_seccion_3)
 
     # Corrección: Pasamos codigo_seccion_3, clave única "key_feature" y ajustamos la altura a 120
-    retro_typewriter_code(codigo_seccion_3, key="key_feature", height=300)
+    retro_typewriter_code(codigo_coloreado_3, key="key_feature", height=280)
 
     # 2. Al pulsar el botón, calculamos la nueva feature y activamos la persistencia
     if run_button("Crear feature bill_ratio"):
@@ -295,15 +323,17 @@ if section == "4. Preprocesamiento":
     if "encoding_ejecutado" not in st.session_state:
         st.session_state["encoding_ejecutado"] = False
 
-    codigo_seccion_4_1 = """num_cols = ['bill_length_mm', 'bill_depth_mm', 
-            'flipper_length_mm', 'body_mass_g', 'bill_ratio']
+    codigo_seccion_4_1 = """num_cols = ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 
+                                'body_mass_g', 'bill_ratio']
 cat_cols = ['island', 'sex']
 
 X = df[num_cols + cat_cols]
 y = df['species']"""
 
+    codigo_coloreado_4_1 = colorear_codigo(codigo_seccion_4_1)
+
     # Pasamos la variable correcta codigo_seccion_4_1 y su clave única
-    retro_typewriter_code(codigo_seccion_4_1, key="key_encoding", height=300)
+    retro_typewriter_code(codigo_coloreado_4_1, key="key_encoding", height=300)
 
     # 2. Al pulsar el botón, ejecutamos la transformación y activamos la persistencia
     if run_button("Realizar Encoding"):
@@ -335,14 +365,19 @@ y = df['species']"""
 # ---------------------------------------------------------
     st.header("Split Train/Test")
 
-    codigo_seccion_4_2 = ("""    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y)
+    # 1. INICIALIZACIÓN: Evita que Streamlit falle si la clave no existe al cargar la sección
+    if "split_ejecutado" not in st.session_state:
+        st.session_state["split_ejecutado"] = False
 
-    print("Train:", X_train.shape)
-    print("Test:", X_test.shape)""")
+    codigo_seccion_4_2 = ("""X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y)
+print("Train:", X_train.shape)
+print("Test:", X_test.shape)""")
+
+    codigo_coloreado_4_2 = colorear_codigo(codigo_seccion_4_2)
 
     # Pasamos la variable correcta codigo_seccion_4_1 y su clave única
-    retro_typewriter_code(codigo_seccion_4_2, key="key_split_train_test", height=300)
+    retro_typewriter_code(codigo_coloreado_4_2, key="key_split_train_test", height=230)
 
     if run_button("Realizar Split"):
         # Comprobamos si X e y existen en el estado antes de continuar
@@ -382,15 +417,17 @@ y = df['species']"""
         st.session_state["preprocessor_ejecutado"] = False
 
     codigo_seccion_4_3 = ("""preprocessor = ColumnTransformer([
-        ('num', SimpleImputer(strategy='median'), num_cols),
-        ('cat', Pipeline([
-            ('imputer', SimpleImputer(strategy='most_frequent')),
-            ('onehot', OneHotEncoder(handle_unknown='ignore'))
-        ]), cat_cols)
-    ])""")
+    ('num', SimpleImputer(strategy='median'), num_cols),  
+    ('cat', Pipeline([ 
+        ('imputer', SimpleImputer(strategy='most_frequent')),  
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))
+    ]), cat_cols)
+])""")
+
+    codigo_coloreado_4_3 = colorear_codigo(codigo_seccion_4_3)
 
     # Pasamos la variable correcta codigo_seccion_4_1 y su clave única
-    retro_typewriter_code(codigo_seccion_4_3, key="key_preprocessor", height=300)
+    retro_typewriter_code(codigo_coloreado_4_3, key="key_preprocessor", height=350)
 
     # 2. Al pulsar el botón, validamos dependencias, ejecutamos la función y activamos persistencia
     if run_button("Crear Preprocessor"):
@@ -438,8 +475,10 @@ rf_preds = rf_pipeline.predict(X_test)
 print("Random Forest - Accuracy:", accuracy_score(y_test, rf_preds))
 print(classification_report(y_test, rf_preds))"""
 
+    codigo_coloreado_5 = colorear_codigo(codigo_seccion_5)
+
     # Cambiamos st.code por tu componente retro con clave única y ajuste de altura
-    retro_typewriter_code(codigo_seccion_5, key="key_random_forest", height=260)
+    retro_typewriter_code(codigo_coloreado_5, key="key_random_forest", height=430)
 
     # 2. Al pulsar el botón, validamos que existan los datos del split y el preprocesador
     if run_button("Entrenar Random Forest"):
@@ -528,10 +567,12 @@ xgb_pipeline.fit(X_train, y_train_enc)
 xgb_preds = xgb_pipeline.predict(X_test)
 
 print("XGBoost - Accuracy:", accuracy_score(y_test_enc, xgb_preds))
-print(classification_report(y_test_enc, xgb_preds))"""
+print(classification_report(y_test_enc, xgb_preds, target_names=le.classes_))"""
+
+    codigo_coloreado_6 = colorear_codigo(codigo_seccion_6)
 
     # Pintamos PRIMERO la máquina de escribir
-    retro_typewriter_code(codigo_seccion_6, key="key_xgboost", height=420)
+    retro_typewriter_code(codigo_coloreado_6, key="key_xgboost", height=800)
 
     # Pintamos SEGUNDO el botón de ejecución
     if run_button("Entrenar XGBoost"):
@@ -611,10 +652,15 @@ xgb_acc = accuracy_score(y_test_enc, xgb_preds)
 
 plt.bar(['Random Forest', 'XGBoost'], [rf_acc, xgb_acc])
 plt.title('Comparativa de Accuracy')
-plt.show()"""
+plt.show()
+
+print(f"Random Forest Accuracy: {accuracy_score(y_test, rf_preds):.3f}")
+print(f"XGBoost Accuracy:       {accuracy_score(y_test_enc, xgb_preds):.3f}")"""
+
+    codigo_coloreado_7 = colorear_codigo(codigo_seccion_7)
 
     # Cambiamos st.code por tu componente retro animado
-    retro_typewriter_code(codigo_seccion_7, key="key_comparativa", height=150)
+    retro_typewriter_code(codigo_coloreado_7, key="key_comparativa", height=500)
 
     # 2. Ejecución al pulsar el botón
     if run_button("Comparar modelos"):
@@ -686,8 +732,10 @@ elif rf_acc > xgb_acc:
 else:
     print("Ambos modelos tienen el mismo rendimiento.")"""
 
+    codigo_coloreado_8 = colorear_codigo(codigo_seccion_8)
+
     # Cambiamos st.code por tu componente retro animado con la altura idónea
-    retro_typewriter_code(codigo_seccion_8, key="key_conclusiones", height=160)
+    retro_typewriter_code(codigo_coloreado_8, key="key_conclusiones", height=500)
 
     # 2. Ejecución al pulsar el botón
     if run_button("Mostrar conclusiones"):
