@@ -735,7 +735,7 @@ else:
     codigo_coloreado_8 = colorear_codigo(codigo_seccion_8)
 
     # Cambiamos st.code por tu componente retro animado con la altura idónea
-    retro_typewriter_code(codigo_coloreado_8, key="key_conclusiones", height=500)
+    retro_typewriter_code(codigo_coloreado_8, key="key_conclusiones", height=400)
 
     # 2. Ejecución al pulsar el botón
     if run_button("Mostrar conclusiones"):
