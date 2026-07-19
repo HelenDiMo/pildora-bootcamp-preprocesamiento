@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import streamlit.components.v1 as components
 
-from components.buttons import run_button, retro_typewriter_code
+from .components.buttons import run_button, retro_typewriter_code
 from components.code_viewer import colorear_codigo
 
 from logic.load_data import load_penguins
