@@ -1,8 +1,3 @@
----
-title: "README"
-mode: "wide"
----
-
 # Masterclass / Píldora Extendida: Preprocesamiento Avanzado y Algoritmos Ensemble
 
 Sesión de la "píldora extendida" sobre preprocesamiento avanzado (outliers, encoding, feature engineering) y algoritmos ensemble (Random Forest, XGBoost, Bagging vs. Boosting), usando el dataset **Palmer Penguins**.
