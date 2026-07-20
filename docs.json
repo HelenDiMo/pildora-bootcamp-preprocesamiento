@@ -1,26 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "Píldora Preprocesamiento",
-  "theme": "mint",
-  "colors": {
-    "primary": "#00E5FF",
-    "light": "#80F2FF",
-    "dark": "#00B2CC"
-  },
-  "navigation": {
-    "groups": [
-      {
-        "group": "Inicio",
-        "pages": [
-          "index"
-        ]
-      }
-    ]
-  },
-  "navbar": {
-    "primary": {
-      "type": "github",
-      "href": "https://github.com/HelenDiMo/pildora-bootcamp-preprocesamiento"
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "index"
+      ]
     }
-  }
+  ]
 }
