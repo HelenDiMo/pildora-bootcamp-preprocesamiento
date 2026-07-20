@@ -7,14 +7,16 @@
     "light": "#80F2FF",
     "dark": "#00B2CC"
   },
-  "navigation": [
-    {
-      "group": "Inicio",
-      "pages": [
-        "readme"
-      ]
-    }
-  ],
+  "navigation": {
+    "groups": [
+      {
+        "group": "Inicio",
+        "pages": [
+          "readme"
+        ]
+      }
+    ]
+  },
   "navbar": {
     "primary": {
       "type": "github",
