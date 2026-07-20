@@ -14,6 +14,7 @@ Sesión de la "píldora extendida" sobre preprocesamiento avanzado (outliers, en
 | Notebook con la solución completa (live coding) | `live_coding_demo.ipnb` |
 | Reto de Aplicación - Para los compañeros | `reto_notebook_bloque3_tips_v2.ipynb` |
 | Reto de Aplicación - _SOLUCIÓN_ | `reto_notebook_bloque3_tips_SOLUCION_v2.ipynb` |
+| Documentación | [https://mintlify.wiki/HelenDiMo/pildora-bootcamp-preprocesamiento/introduction](https://mintlify.wiki/HelenDiMo/pildora-bootcamp-preprocesamiento/introduction) |
 
 ---
 
