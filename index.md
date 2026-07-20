@@ -1,3 +1,5 @@
-import Readme from './README.md';
+---
+title: "index"
+---
 
-<Readme />
+{/* mintlify:include ./README.md */}
