@@ -9,10 +9,11 @@ Sesión de la "píldora extendida" sobre preprocesamiento avanzado (outliers, en
 | Entregable | Enlace / archivo |
 |---|---|
 | Presentación teórica (Genially) | https://view.genially.com/6a500ced927e47fbbe0a9fea |
+| Presentación teórica (Genially) | `presentacion_pptx_pdf.pdf` |
 | Demo interactiva (Streamlit) | https://bootcamp-preprocesamiento.streamlit.app/ |
 | Notebook con la solución completa (live coding) | `live_coding_demo.ipnb` |
-| Notebook con TODOs — reto de aplicación | `reto_notebook.ipynb` |
-| Ficha de Criterio Ético | `ficha_criterio_etico.md` |
+| Reto de Aplicación - Para los compañeros | `reto_notebook_bloque3_tips_v2.ipynb` |
+| Reto de Aplicación - *SOLUCIÓN* | `reto_notebook_bloque3_tips_SOLUCION_v2.ipynb` |
 
 ---
 
