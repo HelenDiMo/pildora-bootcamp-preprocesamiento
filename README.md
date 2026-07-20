@@ -7,13 +7,13 @@ Sesión de la "píldora extendida" sobre preprocesamiento avanzado (outliers, en
 ## 📦 Contenido de la entrega
 
 | Entregable | Enlace / archivo |
-|---|---|
-| Presentación teórica (Genially) | https://view.genially.com/6a500ced927e47fbbe0a9fea |
-| Presentación teórica (Genially) | `presentacion_pptx_pdf.pdf` |
-| Demo interactiva (Streamlit) | https://bootcamp-preprocesamiento.streamlit.app/ |
+| --- | --- |
+| Presentación teórica (Genially) | [https://view.genially.com/6a500ced927e47fbbe0a9fea](https://view.genially.com/6a500ced927e47fbbe0a9fea) |
+| Presentación teórica (`.pdf`) | `presentacion_pptx_pdf.pdf` |
+| Demo interactiva (Streamlit) | [https://bootcamp-preprocesamiento.streamlit.app/](https://bootcamp-preprocesamiento.streamlit.app/) |
 | Notebook con la solución completa (live coding) | `live_coding_demo.ipnb` |
 | Reto de Aplicación - Para los compañeros | `reto_notebook_bloque3_tips_v2.ipynb` |
-| Reto de Aplicación - *SOLUCIÓN* | `reto_notebook_bloque3_tips_SOLUCION_v2.ipynb` |
+| Reto de Aplicación - _SOLUCIÓN_ | `reto_notebook_bloque3_tips_SOLUCION_v2.ipynb` |
 
 ---
 
@@ -33,15 +33,15 @@ Si vais a abrir el notebook del reto en **Google Colab**, no hace falta instalar
 
 ## ▶️ Cómo ejecutar
 
-1. Abrid `live_coding_demo.ipynb` en VSCode, Jupyter o Google Colab: es el live coding de la demo. 
-2. Para el reto, abrid `reto_notebook.ipynb` en VSCode, Jupyter o Google Colab y completad los bloques marcados con `# TODO: Implementar aquí`.
+1. Abrid `live_coding_demo.ipynb` en VSCode, Jupyter o Google Colab: es el live coding de la demo.
+2. Para el reto, abrid `reto_notebook_bloque3_tips_v2.ipynb` en VSCode, Jupyter o Google Colab y completad los bloques marcados con `# TODO: Implementar aquí`.
 
 ---
 
 ## 🚑 Primeros auxilios (Troubleshooting)
 
 | Error | Causa habitual | Solución |
-|---|---|---|
+| --- | --- | --- |
 | `ModuleNotFoundError: No module named 'xgboost'` | XGBoost no está instalado en tu entorno | `pip install xgboost` (o `!pip install xgboost -q` en Colab) |
 | `NameError: name 'X_train' is not defined` | Se ha ejecutado una celda sin ejecutar antes las anteriores | Ejecutad las celdas **en orden**, de arriba a abajo (Run All si dudáis) |
 | `seaborn.load_dataset('penguins')` falla o se queda colgado | Sin conexión a internet, o firewall/proxy bloqueando GitHub | Comprobad vuestra conexión; si seguís sin acceso, pedid el CSV local como alternativa |
@@ -54,4 +54,5 @@ Si vais a abrir el notebook del reto en **Google Colab**, no hace falta instalar
 ---
 
 ## 👥 Autoría
+
 Preparado por Elena Díaz - [@HelenDiMo](https://github.com/HelenDiMo) para el bloque de Machine Learning del bootcamp.

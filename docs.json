@@ -1,0 +1,12 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Píldora Preprocesamiento",
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "index"
+      ]
+    }
+  ]
+}
