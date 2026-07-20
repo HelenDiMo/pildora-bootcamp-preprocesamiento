@@ -1,6 +1,8 @@
 import os
 import sys
 import streamlit as st
+import matplotlib.pyplot as plt  # <--- Esta es la línea que te falta
+import seaborn as sns
 
 # Conseguimos la ruta absoluta del directorio donde está ESTE archivo (la carpeta 'app')
 base_path = os.path.dirname(os.path.abspath(__file__))
