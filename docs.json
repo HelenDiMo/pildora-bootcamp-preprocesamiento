@@ -1,0 +1,17 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Píldora 4 · Star Wars",
+  "description": "Documentación del proyecto de análisis de datos de Star Wars",
+  "colors": {
+    "primary": "#EAB308"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Proyecto",
+        "pages": ["index"]
+      }
+    ]
+  }
+}
