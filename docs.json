@@ -3,17 +3,9 @@
   "name": "Píldora Preprocesamiento",
   "navigation": [
     {
-      "group": "Primeros Pasos",
+      "group": "Documentación",
       "pages": [
-        "introduction",
-        "quickstart"
-      ]
-    },
-    {
-      "group": "Pipeline de Datos",
-      "pages": [
-        "outliers",
-        "split"
+        "README"
       ]
     }
   ],
@@ -22,11 +14,10 @@
     "light": "#80F2FF",
     "dark": "#00B2CC"
   },
-  "favicon": "/favicon.svg",
   "navbar": {
     "primary": {
       "type": "github",
-      "url": "https://github.com/HelenDiMo/pildora-bootcamp-preprocesamiento.git"
+      "url": "https://github.com/HelenDiMo/pildora-bootcamp-preprocesamiento"
     }
   }
 }
