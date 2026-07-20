@@ -1,17 +1,32 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Píldora 4 · Star Wars",
-  "description": "Documentación del proyecto de análisis de datos de Star Wars",
+  "name": "Píldora Preprocesamiento",
+  "navigation": [
+    {
+      "group": "Primeros Pasos",
+      "pages": [
+        "introduction",
+        "quickstart"
+      ]
+    },
+    {
+      "group": "Pipeline de Datos",
+      "pages": [
+        "outliers",
+        "split"
+      ]
+    }
+  ],
   "colors": {
-    "primary": "#EAB308"
+    "primary": "#00E5FF",
+    "light": "#80F2FF",
+    "dark": "#00B2CC"
   },
-  "navigation": {
-    "groups": [
-      {
-        "group": "Proyecto",
-        "pages": ["index"]
-      }
-    ]
+  "favicon": "/favicon.svg",
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "url": "https://github.com/tu-usuario/pildora-bootcamp-preprocesamiento"
+    }
   }
 }
