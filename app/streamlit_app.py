@@ -1,7 +1,7 @@
 import os
 import sys
 import streamlit as st
-import matplotlib.pyplot as plt  # <--- Esta es la línea que te falta
+import matplotlib.pyplot as plt 
 import seaborn as sns
 import pandas as pd
 
@@ -10,7 +10,7 @@ base_path = os.path.dirname(os.path.abspath(__file__))
 if base_path not in sys.path:
     sys.path.insert(0, base_path)
 
-# Ahora las importaciones funcionarán de forma idéntica en local y en la nube
+
 from components.buttons import run_button, retro_typewriter_code
 from components.code_viewer import colorear_codigo
 
@@ -29,8 +29,6 @@ from sklearn.preprocessing import LabelEncoder
 st.session_state.setdefault("rf_acc", None)
 st.session_state.setdefault("xgb_acc", None)
 
-
-
 # 1. TITULO
 
 st.set_page_config(page_title=" 🐧 Preprocessing & ML Demo", layout="wide")
@@ -38,7 +36,6 @@ st.set_page_config(page_title=" 🐧 Preprocessing & ML Demo", layout="wide")
 # ======== CARGAR CSS ========
 with open("app/assets/styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-    
 
 # ======== BANNER ========
 st.image("app/assets/banner.jpg", width="stretch")
@@ -76,12 +73,48 @@ if section not in[
     st.warning("Primero debes cargar el dataset en la sección 1.")
     st.stop()
 
+st.sidebar.markdown("---")
+
+with st.sidebar:
+    st.header("🛠️ Entorno y Requisitos")
+    
+    with st.expander("📦 Librerías necesarias"):
+        st.caption("📊 **Análisis y Datos**")
+        st.markdown("`pandas` • `numpy` • `seaborn` • `matplotlib`")
+        
+        st.caption("🤖 **Scikit-Learn & ML**")
+        st.markdown("""
+        `train_test_split` • `OneHotEncoder` • `ColumnTransformer` • `Pipeline` • `SimpleImputer` • `RandomForestClassifier` • `LabelEncoder` • `accuracy_score` • `classification_report`
+        """)
+        
+        st.caption("⚡ **XGBoost**")
+        st.markdown("`XGBClassifier`")
+
+st.sidebar.markdown("---")
+st.sidebar.header("📁 Recursos del Taller")
+
+# Ruta relativa al archivo .ipynb dentro de tu repositorio
+notebook_path = "notebooks/reto_notebook_bloque3_tips_v2.ipynb"  # Ruta a  .ipynb
+
+if os.path.exists(notebook_path):
+    with open(notebook_path, "rb") as file:
+        btn = st.sidebar.download_button(
+            label="📥 Descargar Notebook (.ipynb)",
+            data=file,
+            file_name="reto_notebook_bloque3_tips_v2.ipynb",
+            mime="application/x-ipynb+json",
+            use_container_width=True
+        )
+else:
+    st.sidebar.warning("⚠️ Archivo de notebook no encontrado.")
+        
 # =========================================================================
 # SECCION 1: CARGAR DATASET Y EXPLORACIÓN INICIAL
 # =========================================================================
 
 if section == "1. Cargar Dataset y Exploración Inicial":
-    st.header("Cargar Dataset")
+    st.header("1. Cargar Dataset y Exploración Inicial")
+    st.subheader("1.1 Cargar Dataset")
 
     # 1. Creamos un estado persistente para saber si el resultado ya se ejecutó
     if "df_cargado" not in st.session_state:
@@ -92,6 +125,7 @@ if section == "1. Cargar Dataset y Exploración Inicial":
     # ---------------------------------------------------------
     # BLOQUE 1 — Carga del dataset (Efecto máquina de Escribir)
     # ---------------------------------------------------------
+
     codigo_puro_1_1 = ("""df = sns.load_dataset('penguins')
 print("Shape:", df.shape)
 df.head()"""
@@ -100,7 +134,7 @@ df.head()"""
     codigo_coloreado_1_1 = colorear_codigo(codigo_puro_1_1)
     
     # Invocamos la función mágica (se queda exactamente igual)
-    retro_typewriter_code(codigo_coloreado_1_1, key="key_carga", height=180) 
+    retro_typewriter_code(codigo_coloreado_1_1, key="key_carga", height=170) 
     
     # 2. Si pulsas el botón, guardamos el DataFrame y activamos el interruptor
     if run_button("Cargar Dataset"):
@@ -118,11 +152,16 @@ df.head()"""
     # ---------------------------------------------------------
     # BLOQUE 2 — Análisis de nulos
     # ---------------------------------------------------------
-    st.header("Análisis de Nulos")
+    st.subheader("1.2 Análisis de Nulos")
 
     # Inicializamos el estado persistente para el resultado del Bloque 2
     if "nulos_mostrados" not in st.session_state:
         st.session_state["nulos_mostrados"] = False
+
+        st.markdown("""### Nulos por Columna:
+* Aquí veremos qué variables (columnas) tienen datos nulos. 
+* Si nuestra variable objetivo (`y`), en este caso `species` tuviera datos nulos, lo ideal sería quitar las filas correspondientes""")
+
 
     codigo_seccion_1_2 = (
         "df.isnull().sum()"
@@ -130,7 +169,7 @@ df.head()"""
     
     codigo_coloreado_1_2 = colorear_codigo(codigo_seccion_1_2)
 
-    retro_typewriter_code(codigo_coloreado_1_2, key="key_nulos_col", height=100) # en este height hago que queda el codigo en el contenedor
+    retro_typewriter_code(codigo_coloreado_1_2, key="key_nulos_col", height=100) # en este height hago que quepa el codigo en el contenedor
 
     # Si se pulsa el botón, activamos su persistencia
     if run_button("Mostrar nulos"):
@@ -147,7 +186,7 @@ df.head()"""
     # BLOQUE 3 — Descripción de variables numéricas
     # ---------------------------------------------------------
 
-    st.header("Descripción de variables numéricas")
+    st.subheader("1.3 Descripción de variables numéricas")
     codigo_seccion_1_3 = (
         "df.describe()"
         )
@@ -155,7 +194,7 @@ df.head()"""
     codigo_coloreado_1_3 = colorear_codigo(codigo_seccion_1_3)
 
     
-    retro_typewriter_code(codigo_coloreado_1_3, key="key_descripcion", height=100) # en este height hagoq ue queda el codigo en el contenedor
+    retro_typewriter_code(codigo_coloreado_1_3, key="key_descripcion", height=100) 
 
     if run_button("Describir variables numéricas"):
         df = st.session_state["df"]
@@ -172,6 +211,8 @@ if section == "2. Outliers":
     # 1. Inicializamos el estado persistente para los gráficos y resultados de esta sección
     if "outliers_tratados" not in st.session_state:
         st.session_state["outliers_tratados"] = False
+
+    st.markdown("""Detectamos outliers en `bill_length_mm` usando el método IQR y los visualizamos. """)
 
     codigo_seccion_2 = """fig, ax = plt.subplots(1, 2, figsize=(10, 4))
 sns.boxplot(y=df['bill_length_mm'], ax=ax[0])
@@ -199,13 +240,13 @@ plt.show()"""
 
     codigo_coloreado_2 = colorear_codigo(codigo_seccion_2)
 
-    retro_typewriter_code(codigo_coloreado_2, key="key_outliers", height=900) # en este height hagoq ue queda el codigo en el contenedor
+    retro_typewriter_code(codigo_coloreado_2, key="key_outliers", height=770) 
 
     # 3. Al pulsar el botón, ejecutamos el tratamiento matemático y guardamos los resultados en el estado
     if run_button("Tratar outliers"):
         df_actual = st.session_state.get("df")
         
-        # Aplicamos tu función de tratamiento
+        # Aplicamos la función de tratamiento
         df_procesado, lower, upper = cap_outliers(df_actual, "bill_length_mm")
         
         # Guardamos en sesión tanto el nuevo DataFrame como los límites calculados
@@ -260,10 +301,12 @@ plt.show()"""
         st.write(f"Límite superior: {upper:.2f}")
         st.success("Outliers tratados correctamente")
 
+    with st.expander(""" 💬 **Pregunta para el grupo:** ¿por qué hemos "capado" en vez de eliminar directamente las filas con outliers?"""):
+        st.info("""Porque capar conserva el resto de columnas de esa fila (isla, sexo, otras medidas...), que siguen siendo información válida — eliminar la fila entera las tira también. Además, con un dataset pequeño como Penguins, cada fila cuenta: perder filas reduce los datos disponibles para entrenar y evaluar el modelo. """)
+
 # =========================================================================================
 # SECCION 3: FEATURE ENGINEERING
 # =========================================================================================
-
 
 if section == "3. Feature Engineering":
     st.header("3. Feature Engineering")
@@ -272,6 +315,10 @@ if section == "3. Feature Engineering":
     if "feature_engineering_ejecutado" not in st.session_state:
         st.session_state["feature_engineering_ejecutado"] = False
 
+    st.markdown(""" Creamos una variable nueva: la relación entre longitud y profundidad del pico - `bill_ratio` 
+
+    Esta relación varía bastante entre especies, así que puede ayudar al modelo.""")
+    
     codigo_seccion_3 = ("""df['bill_ratio'] = df['bill_length_mm'] / df['bill_depth_mm']
 
 sns.boxplot(data=df, x='species', y='bill_ratio')
@@ -280,8 +327,7 @@ plt.show()""")
     
     codigo_coloreado_3 = colorear_codigo(codigo_seccion_3)
 
-    # Corrección: Pasamos codigo_seccion_3, clave única "key_feature" y ajustamos la altura a 120
-    retro_typewriter_code(codigo_coloreado_3, key="key_feature", height=280)
+    retro_typewriter_code(codigo_coloreado_3, key="key_feature", height=220)
 
     # 2. Al pulsar el botón, calculamos la nueva feature y activamos la persistencia
     if run_button("Crear feature bill_ratio"):
@@ -323,12 +369,18 @@ if section == "4. Preprocesamiento":
 # ---------------------------------------------------------
 # BLOQUE 1 — Encoding
 # ---------------------------------------------------------
-
-    st.header("Encoding")
+    st.header("4. Preprocesamiento")
+    st.subheader("4.1 Encoding")
 
     # 1. Inicializamos el estado persistente para esta subsección
     if "encoding_ejecutado" not in st.session_state:
         st.session_state["encoding_ejecutado"] = False
+
+    st.markdown("""`island` y `sex` son categóricas.
+    
+`bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `body_mass_g`, `bill_ratio` son numéricas.
+    
+→ las convertiremos con One-Hot Encoding, integrado dentro de un Pipeline de sklearn (esto evita tener que hacerlo a mano). """)
 
     codigo_seccion_4_1 = """num_cols = ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 
                                 'body_mass_g', 'bill_ratio']
@@ -340,7 +392,7 @@ y = df['species']"""
     codigo_coloreado_4_1 = colorear_codigo(codigo_seccion_4_1)
 
     # Pasamos la variable correcta codigo_seccion_4_1 y su clave única
-    retro_typewriter_code(codigo_coloreado_4_1, key="key_encoding", height=300)
+    retro_typewriter_code(codigo_coloreado_4_1, key="key_encoding", height=250)
 
     # 2. Al pulsar el botón, ejecutamos la transformación y activamos la persistencia
     if run_button("Realizar Encoding"):
@@ -370,12 +422,14 @@ y = df['species']"""
 # ---------------------------------------------------------
 # BLOQUE 2 — Split Train/Test
 # ---------------------------------------------------------
-    st.header("Split Train/Test")
+    st.subheader("4.2 Split Train/Test")
 
     # 1. INICIALIZACIÓN: Evita que Streamlit falle si la clave no existe al cargar la sección
     if "split_ejecutado" not in st.session_state:
         st.session_state["split_ejecutado"] = False
 
+    st.markdown(""" ⚠️ Importante: dividimos ANTES de aplicar imputación/encoding para evitar data leakage (que información del test "se filtre" al train).""")
+    
     codigo_seccion_4_2 = ("""X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y)
 print("Train:", X_train.shape)
@@ -384,7 +438,7 @@ print("Test:", X_test.shape)""")
     codigo_coloreado_4_2 = colorear_codigo(codigo_seccion_4_2)
 
     # Pasamos la variable correcta codigo_seccion_4_1 y su clave única
-    retro_typewriter_code(codigo_coloreado_4_2, key="key_split_train_test", height=230)
+    retro_typewriter_code(codigo_coloreado_4_2, key="key_split_train_test", height=200)
 
     if run_button("Realizar Split"):
         # Comprobamos si X e y existen en el estado antes de continuar
@@ -417,11 +471,13 @@ print("Test:", X_test.shape)""")
 # ---------------------------------------------------------
 # BLOQUE 3 — Preprocessor
 # ---------------------------------------------------------
-    st.header("Preprocessor")
+    st.subheader("4.3 Preprocessor")
 
     # 1. Inicializamos el estado persistente para esta subsección
     if "preprocessor_ejecutado" not in st.session_state:
         st.session_state["preprocessor_ejecutado"] = False
+
+    st.markdown(""" Aplica transformaciones distintas a distintos grupos de columnas, de una vez.""")
 
     codigo_seccion_4_3 = ("""preprocessor = ColumnTransformer([
     ('num', SimpleImputer(strategy='median'), num_cols),  
@@ -434,7 +490,7 @@ print("Test:", X_test.shape)""")
     codigo_coloreado_4_3 = colorear_codigo(codigo_seccion_4_3)
 
     # Pasamos la variable correcta codigo_seccion_4_1 y su clave única
-    retro_typewriter_code(codigo_coloreado_4_3, key="key_preprocessor", height=350)
+    retro_typewriter_code(codigo_coloreado_4_3, key="key_preprocessor", height=290)
 
     # 2. Al pulsar el botón, validamos dependencias, ejecutamos la función y activamos persistencia
     if run_button("Crear Preprocessor"):
@@ -460,18 +516,25 @@ print("Test:", X_test.shape)""")
         st.success("Preprocessor creado correctamente.")
 
 
-#============================================
+# ============================================
 # SECCION 5: RANDOM FOREST
-#============================================
+# ============================================
 
 if section == "5. Random Forest":
     st.header("5. Random Forest")
 
-    # 1. Inicializamos el estado persistente para el modelo y sus métricas
+    # 1. Inicializamos el estado persistente
     if "rf_ejecutado" not in st.session_state:
         st.session_state["rf_ejecutado"] = False
 
-    codigo_seccion_5 = """rf_pipeline = Pipeline([
+    st.markdown(""" * **PRECISION:** De las veces que el modelo dijo "Adelie", ¿cuántas acertó?
+* **RECALL:** De todas las Adelie reales, ¿cuántas detectó el modelo?
+* **F1-SCORE:** Combina precision y recall en un solo número.
+* **SUPPORT:** Cuántos ejemplos reales de esa clase había en el test.""")
+
+    # Código exacto del Notebook (Entrenamiento + Importancia de variables)
+    codigo_seccion_5 = """# 1. Entrenamiento y evaluación
+rf_pipeline = Pipeline([
     ('preprocessor', preprocessor),
     ('model', RandomForestClassifier(n_estimators=200, random_state=42))
 ])
@@ -480,14 +543,30 @@ rf_pipeline.fit(X_train, y_train)
 rf_preds = rf_pipeline.predict(X_test)
 
 print("Random Forest - Accuracy:", accuracy_score(y_test, rf_preds))
-print(classification_report(y_test, rf_preds))"""
+print(classification_report(y_test, rf_preds))
+
+# 2. Importancia de variables
+feature_names = (
+    num_cols +
+    list(rf_pipeline.named_steps['preprocessor']
+        .named_transformers_['cat']
+        .named_steps['onehot']
+        .get_feature_names_out(cat_cols))
+)
+importances = rf_pipeline.named_steps['model'].feature_importances_
+
+feat_imp = pd.Series(importances, index=feature_names).sort_values(ascending=False)
+feat_imp.plot(kind='barh', figsize=(8, 5), title='Importancia de variables (Random Forest)')
+plt.gca().invert_yaxis()
+plt.tight_layout()
+plt.show()"""
 
     codigo_coloreado_5 = colorear_codigo(codigo_seccion_5)
 
-    # Cambiamos st.code por tu componente retro con clave única y ajuste de altura
-    retro_typewriter_code(codigo_coloreado_5, key="key_random_forest", height=430)
+    # Mostramos todo el bloque de código del notebook en el visualizador retro
+    retro_typewriter_code(codigo_coloreado_5, key="key_random_forest", height=870)
 
-    # 2. Al pulsar el botón, validamos que existan los datos del split y el preprocesador
+    # 2. Botón de ejecución
     if run_button("Entrenar Random Forest"):
         ss = st.session_state
         
@@ -495,12 +574,10 @@ print(classification_report(y_test, rf_preds))"""
         if not all(k in ss for k in requisitos):
             st.error("⚠️ Faltan dependencias. Asegúrate de haber completado el Split Train/Test y la creación del Preprocessor en la sección 4.")
         else:
-            # Recuperamos datos y preprocessor
             X_train, X_test = ss["X_train"], ss["X_test"]
             y_train, y_test = ss["y_train"], ss["y_test"]
             preprocessor = ss["preprocessor"]
 
-            # Construimos el pipeline real y entrenamos
             rf_pipeline = Pipeline([
                 ('preprocessor', preprocessor),
                 ('model', RandomForestClassifier(n_estimators=200, random_state=42))
@@ -509,41 +586,84 @@ print(classification_report(y_test, rf_preds))"""
             rf_pipeline.fit(X_train, y_train)
             rf_preds = rf_pipeline.predict(X_test)
 
-            # Calculamos métricas
             acc = accuracy_score(y_test, rf_preds)
             report = classification_report(y_test, rf_preds, output_dict=True)
 
-            # Guardamos los resultados y predicciones en session_state para la persistencia
             st.session_state["rf_pipeline"] = rf_pipeline
             st.session_state["rf_acc"] = acc
             st.session_state["rf_report"] = pd.DataFrame(report).transpose()
             st.session_state["rf_y_test"] = y_test
             st.session_state["rf_preds"] = rf_preds
             
-            # ¡Encendemos el interruptor del modelo!
             st.session_state["rf_ejecutado"] = True
 
-    # 3. PERSISTENCIA: Renderizado fijo de los resultados del entrenamiento 
+    # 3. Rendimiento y visualización
     if st.session_state.get("rf_ejecutado"):
+        st.success("Random Forest entrenado correctamente.")
         st.write(f"### Accuracy: **{st.session_state['rf_acc']:.4f}**")
 
-        # Mostramos clasificación por especie (fijo en pantalla)
         st.write("### Clasificación por especie")
         st.dataframe(st.session_state["rf_report"])
 
-        # Matriz de confusión (se regenera de forma segura a partir de los datos guardados)
         st.write("### Matriz de confusión")
-        fig, ax = plt.subplots(figsize=(4, 3))
+        fig_cm, ax_cm = plt.subplots(figsize=(3.5, 3.5))
         ConfusionMatrixDisplay.from_predictions(
             st.session_state["rf_y_test"], 
             st.session_state["rf_preds"], 
-            ax=ax,
-            cmap="viridis" # Un toque de color genial para el look cyber/retro
+            ax=ax_cm,
+            cmap="viridis"
         )
-        st.pyplot(fig)
+        plt.tight_layout()
 
-        st.success("Random Forest entrenado correctamente.")
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.pyplot(fig_cm, use_container_width=False)
 
+        # -----------------------------------------------------------
+        # GRÁFICA: Importancia de Variables (Dinámica y segura)
+        # -----------------------------------------------------------
+        st.write("### Importancia de Variables (Random Forest)")
+        
+        rf_pipeline = st.session_state["rf_pipeline"]
+        
+        # 1. Extraemos dinámicamente TODOS los nombres de columnas tras el preprocesado
+        # Esto previene el desacople de longitudes (Length mismatch)
+        try:
+            feature_names = rf_pipeline.named_steps['preprocessor'].get_feature_names_out()
+            # Limpiamos prefijos molestos como 'num__' o 'cat__' para que el gráfico quede impecable
+            feature_names = [f.split('__')[-1] for f in feature_names]
+        except Exception:
+            # Fallback en caso de que la versión de scikit-learn varíe
+            num_cols = ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g']
+            cat_cols = ['island', 'sex']
+            cat_feature_names = list(
+                rf_pipeline.named_steps['preprocessor']
+                .named_transformers_['cat']
+                .named_steps['onehot']
+                .get_feature_names_out(cat_cols)
+            )
+            feature_names = num_cols + cat_feature_names
+
+        importances = rf_pipeline.named_steps['model'].feature_importances_
+        
+        # 2. Creamos la serie ordenada
+        feat_imp = pd.Series(importances, index=feature_names).sort_values(ascending=True)
+
+        # 3. Graficamos en formato compacto
+        fig_imp, ax_imp = plt.subplots(figsize=(4.5, 3.2))
+        feat_imp.plot(kind='barh', ax=ax_imp, color='#2ca02c')
+        ax_imp.set_title("Importancia de variables")
+        ax_imp.set_xlabel("Peso / Importancia")
+        plt.tight_layout()
+
+        col1_imp, col2_imp, col3_imp = st.columns([1, 2, 1])
+        with col2_imp:
+            st.pyplot(fig_imp, use_container_width=False)
+
+    with st.expander("💡 **Reto para el equipo:** Según el gráfico de importancia, ¿qué variable pesa más? ¿Tiene sentido biológicamente?"):
+        st.info(""" La variable que más pesa es la variable nueva que hemos creado con Feature Engineering, `bill_ratio` (relación entre longitud y profundidad del pico), seguida de `bill_length_mm`.
+
+Tiene todo el sentido biológico porque la forma del pico es un rasgo morfológico clave muy ligado a la dieta y nicho ecológico de cada especie de pingüino (Adelie, Chinstrap y Gentoo), superando con frecuencia al tamaño o peso corporal general. """)
 #=============================================================
 # SECCION 6: XGBOOST
 #=============================================================
@@ -554,6 +674,8 @@ if section == "6. XGBoost":
     # 1. Inicializamos el estado persistente para XGBoost
     if "xgb_ejecutado" not in st.session_state:
         st.session_state["xgb_ejecutado"] = False
+
+    st.markdown("""XGBoost necesita el target como números, no texto, así que usamos LabelEncoder solo para `y`. """)
 
     codigo_seccion_6 = """le = LabelEncoder()
 y_train_enc = le.fit_transform(y_train)
@@ -579,7 +701,7 @@ print(classification_report(y_test_enc, xgb_preds, target_names=le.classes_))"""
     codigo_coloreado_6 = colorear_codigo(codigo_seccion_6)
 
     # Pintamos PRIMERO la máquina de escribir
-    retro_typewriter_code(codigo_coloreado_6, key="key_xgboost", height=800)
+    retro_typewriter_code(codigo_coloreado_6, key="key_xgboost", height=690)
 
     # Pintamos SEGUNDO el botón de ejecución
     if run_button("Entrenar XGBoost"):
@@ -632,14 +754,22 @@ print(classification_report(y_test_enc, xgb_preds, target_names=le.classes_))"""
         st.dataframe(st.session_state["xgb_report"])
 
         st.write("### Matriz de confusión")
-        fig, ax = plt.subplots(figsize=(4, 3))
+        fig, ax = plt.subplots(figsize=(3.5, 3.5))
         ConfusionMatrixDisplay.from_predictions(
             st.session_state["xgb_y_test_orig"], 
             st.session_state["xgb_preds_decoded"], 
             ax=ax,
             cmap="plasma"
         )
-        st.pyplot(fig)
+        # 2. Ajustamos los márgenes para que no haya espacios blancos sobrantes
+        plt.tight_layout()
+
+        # 3. Usamos columnas para centrarla y controlar su ancho máximo en la pantalla
+        col1, col2, col3 = st.columns([1, 2, 1])
+
+        with col2:
+            # use_container_width=False evita que Streamlit estire el gráfico
+            st.pyplot(fig, use_container_width=False)
 
         st.success("XGBoost entrenado correctamente.")
 
@@ -667,7 +797,7 @@ print(f"XGBoost Accuracy:       {accuracy_score(y_test_enc, xgb_preds):.3f}")"""
     codigo_coloreado_7 = colorear_codigo(codigo_seccion_7)
 
     # Cambiamos st.code por tu componente retro animado
-    retro_typewriter_code(codigo_coloreado_7, key="key_comparativa", height=400)
+    retro_typewriter_code(codigo_coloreado_7, key="key_comparativa", height=350)
 
     # 2. Ejecución al pulsar el botón
     if run_button("Comparar modelos"):
@@ -703,12 +833,23 @@ print(f"XGBoost Accuracy:       {accuracy_score(y_test_enc, xgb_preds):.3f}")"""
 
         # Gráfica comparativa
         st.write("### Gráfica de Accuracy")
-        fig, ax = plt.subplots(figsize=(4, 3))
+
+        # 1. Mantenemos una proporción compacta
+        fig, ax = plt.subplots(figsize=(3.5, 3))
+
         ax.bar(["Random Forest", "XGBoost"], [rf_acc_p, xgb_acc_p], color=["steelblue", "#ff7f0e"])
         ax.set_ylim(0, 1)
         ax.set_ylabel("Accuracy")
         ax.set_title("Comparativa de modelos")
-        st.pyplot(fig)
+
+        # 2. Ajustamos los márgenes
+        plt.tight_layout()
+
+        # 3. Centramos con columnas para que no se estire
+        col1, col2, col3 = st.columns([1, 2, 1])
+
+        with col2:
+            st.pyplot(fig, use_container_width=False)
 
         # Recomendación automática
         st.write("### Mejor modelo")
@@ -742,7 +883,7 @@ else:
     codigo_coloreado_8 = colorear_codigo(codigo_seccion_8)
 
     # Cambiamos st.code por tu componente retro animado con la altura idónea
-    retro_typewriter_code(codigo_coloreado_8, key="key_conclusiones", height=400)
+    retro_typewriter_code(codigo_coloreado_8, key="key_conclusiones", height=350)
 
     # 2. Ejecución al pulsar el botón
     if run_button("Mostrar conclusiones"):
@@ -805,8 +946,6 @@ else:
         - **Random Forest**: Arquitectura más simple, predicción rápida, ideal si buscas **estabilidad y mantenibilidad**.
         - **XGBoost**: Más potente en escalabilidad, óptimo si el volumen de datos crece drásticamente o si buscas rascar la **máxima precisión** posible a costa de un ligero aumento en la complejidad del despliegue.
         """)
-
-        st.success("Conclusiones generadas correctamente.")
 
 # ---------------------------------------------------------
 # SECCIÓN 9 — Ficha de Criterio Ético

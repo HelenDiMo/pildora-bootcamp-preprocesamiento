@@ -90,7 +90,7 @@ def retro_typewriter_code(html_coloreado: str, key: str, height: int = 250):
                         currentHTML += htmlCompleto[i];
                         target.innerHTML = currentHTML;
                         i++;
-                        setTimeout(type, 70); 
+                        setTimeout(type, 40); 
                     }}
                 }} else {{
                     window.localStorage.setItem(storageKey, 'true');
